@@ -1,12 +1,13 @@
 <?php
-if(mb_strlen ($_POST["title"])<30){
-  echo "送信できません" ;}
-if(empty($_post["title" ])){
-  echo "送信できません";
-}
+$title="";
+$kiji="";
 
-if(empty($_POST["kiji"])){
-  echo "送信できません" ;
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
+ if(!empty($_POST["kiji"]) && !empty($_POST["title"])){
+  $title=$_POST["title"];
+  $kiji=$_POST["kiji"];
+ }
 }
 ?>
 <!DOCTYPE html>
@@ -19,23 +20,21 @@ if(empty($_POST["kiji"])){
 
 <body>
    <form method="POST" name="lalavel news" > 
-     <ul>
        <div>
-       <li class="title">
        <input type="text" name="title" >
-      </li>
       </div>
       <div>
-      <li class="kiji">
        <textarea row="10" cols="60" name="kiji"> </textarea>
-       </li>
       </div>
-
-      <li class="sousin">
        <input type="submit" name="sousin">
-</li>
-     </ul>
    </form>
+
+    <h3>
+     <?php echo $title ?>
+    </h3>
+    <p>
+    <?php echo $kiji ?>
+    </p>
 </body>
 
 </html>

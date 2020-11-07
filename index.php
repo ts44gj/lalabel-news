@@ -7,6 +7,9 @@ $id = uniqid();
 $DATE = [];
 $BOARD + [];
 
+if (file_exists($FILE)){
+ $BOARD = json_decode(file_get_contents($FILE));
+
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
  if(!empty($_POST["kiji"]) && !empty($_POST["title"])){

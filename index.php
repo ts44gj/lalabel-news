@@ -2,11 +2,21 @@
 $title="";
 $kiji="";
 
+$FILE = `article.text`;
+$id = uniqid();
+$DATE = [];
+$BOARD + [];
+
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
  if(!empty($_POST["kiji"]) && !empty($_POST["title"])){
   $title=$_POST["title"];
   $kiji=$_POST["kiji"];
+  
+  $DATE=[$id,$title,$text];
+  $BOARD[] = $DATE;
+  
+  file_put_contents($FILE, json_encode($BOARD)); 
  }
 }
 ?>

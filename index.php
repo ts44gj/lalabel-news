@@ -2,11 +2,24 @@
 $title="";
 $kiji="";
 
+/*$FILE = `article.text`;
+$id = uniqid();
+$DATE = [];
+$BOARD + [];*/
+
+/*if (file_exists($FILE)){
+ $BOARD = json_decode(file_get_contents($FILE));*/
+
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
  if(!empty($_POST["kiji"]) && !empty($_POST["title"])){
   $title=$_POST["title"];
   $kiji=$_POST["kiji"];
+  
+  /*$DATE=[$id,$title,$text];
+  $BOARD[] = $DATE;*/
+  
+  file_put_contents($FILE, json_encode($BOARD)); 
  }
 }
 ?>
@@ -19,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 </head>
 
 <body>
-   <form method="POST" name="lalavel news" > 
+   <form  method="POST" name="lalavel news" > 
        <div>
        <input type="text" name="title" >
       </div>
@@ -35,6 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <p>
     <?php echo $kiji ?>
     </p>
+<div>
+
+
 </body>
 
 </html>

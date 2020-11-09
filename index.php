@@ -17,7 +17,16 @@ $BOARD = json_decode(file_get_contents($FILE));
 
 }
 
+$FILE = `article.text`;
+$id = uniqid();
+$DATE = [];
+$BOARD + [];
+
+if (file_exists($FILE)){
+ $BOARD = json_decode(file_get_contents($FILE));
+
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
 
    //文字数制限
 if(mb_strlen($_POST["title"])>30){
@@ -46,6 +55,16 @@ else if(empty($_POST["title"])){
 //記事
 else if(empty($_POST["text"])){
   $ERROR[]="記事を入力してください";}
+
+ if(!empty($_POST["kiji"]) && !empty($_POST["title"])){
+  $title=$_POST["title"];
+  $kiji=$_POST["kiji"];
+  
+  $DATE=[$id,$title,$text];
+  $BOARD[] = $DATE;
+  
+  file_put_contents($FILE, json_encode($BOARD)); 
+ }
 
 }
 ?>

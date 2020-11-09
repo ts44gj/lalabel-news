@@ -19,8 +19,13 @@ $BOARD = json_decode(file_get_contents($FILE));
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
+   //文字数制限
+if(mb_strlen($_POST["title"])>30){
+  $ERROR[]="タイトルは30文字以内で入力してください";
+}
+
   //リクエストパラメータが空でなければ
-if(!empty($_POST["text"]) && !empty($_POST["title"])){
+else if(!empty($_POST["text"]) && !empty($_POST["title"])){
 
    //投稿ボタンが押された時
    //$title・$textに送信されたテキストを代入
@@ -34,18 +39,14 @@ if(!empty($_POST["text"]) && !empty($_POST["title"])){
   //全体配列をファイルに保存する
   file_put_contents($FILE, json_encode($BOARD)); 
 }
-
-if(empty($_POST["title"])){
+//この下に未入力と文字数制限を書き込む
+else if(empty($_POST["title"])){
    //タイトル
-  $ERROR[]="タイトルを入力してください";
-}
-    //タイトルの文字制限
-if(mb_strlen($_POST["title"])>30){
-  $ERROR[]="タイトルは30文字以内で入力してください";
-}
-if (empty($_POST["text"])){
-  $ERROR[]="記事を入力してください";
-}
+  $ERROR[]="タイトルを入力してください";}
+//記事
+else if(empty($_POST["text"])){
+  $ERROR[]="記事を入力してください";}
+
 }
 ?>
 <!DOCTYPE html>
@@ -73,7 +74,7 @@ if (empty($_POST["text"])){
      <!--エラーメッセージの表示-->
      <ul>
       <?php foreach($ERROR as $erro_message): ?>
-      <li><?php echo $erro_message; ?></li>
+      <li><?php echo $erro_message  ; ?></li>
       <?php endforeach;?>  
       </ul>
       
@@ -85,7 +86,7 @@ if (empty($_POST["text"])){
       </div>
       <div>
           <p>記事</p>
-          <textarea row="10" cols="60" name="text"> </textarea>
+          <textarea row="10"cols="60"name="text"></textarea>
       </div>
       <div>
           <input type="submit" name="push" value="投稿"　onclick="">

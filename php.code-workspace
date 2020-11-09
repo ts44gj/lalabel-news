@@ -1,20 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "../main/index"
-		},
-		{
-			"path": "../main/rensyuu"
-		},
-		{
-			"path": "../main/beginner"
-		},
-		{
-			"path": "../main/tyuukyuu"
-		},
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }

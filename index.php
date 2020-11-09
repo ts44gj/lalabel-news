@@ -1,6 +1,21 @@
 <?php
-$title="";
-$kiji="";
+$title=""; //タイトルの変数
+$text=""; //テキストの変数
+$ERROR=array();//エラーを確認するための変数
+
+$FILE = "article.txt"; //保存ファイル名
+$id = uniqid(); //ユニークなIDを自動生成
+$DATE = []; //一回分の投稿の情報を入れる
+$BOARD = []; //全ての投稿の情報を入れる
+
+
+
+//$FILEというファイルが存在する時
+if (file_exists($FILE)){
+  //ファイルを読み込む
+$BOARD = json_decode(file_get_contents($FILE));
+
+}
 
 $FILE = `article.text`;
 $id = uniqid();
@@ -12,6 +27,35 @@ if (file_exists($FILE)){
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
+
+   //文字数制限
+if(mb_strlen($_POST["title"])>30){
+  $ERROR[]="タイトルは30文字以内で入力してください";
+}
+
+  //リクエストパラメータが空でなければ
+else if(!empty($_POST["text"]) && !empty($_POST["title"])){
+
+   //投稿ボタンが押された時
+   //$title・$textに送信されたテキストを代入
+ $title=$_POST["title"];
+ $text=$_POST["text"];
+  //この後に保存の処理をする
+  //新規データ
+  $DATE=[$id,$title,$text];
+  $BOARD[] = $DATE;
+  
+  //全体配列をファイルに保存する
+  file_put_contents($FILE, json_encode($BOARD)); 
+}
+//この下に未入力と文字数制限を書き込む
+else if(empty($_POST["title"])){
+   //タイトル
+  $ERROR[]="タイトルを入力してください";}
+//記事
+else if(empty($_POST["text"])){
+  $ERROR[]="記事を入力してください";}
+
  if(!empty($_POST["kiji"]) && !empty($_POST["title"])){
   $title=$_POST["title"];
   $kiji=$_POST["kiji"];
@@ -21,33 +65,70 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
   
   file_put_contents($FILE, json_encode($BOARD)); 
  }
+
 }
 ?>
 <!DOCTYPE html>
-<html>
+ <html>
 
-<head>
+ <head>
   <meta charset='utf-8'>
-  <title>lalabelnews<</title>
-</head>
+  <title>larabelnews<</title>
+  <!--<link rel="stylesheet" href="stylesheet.css">-->
+ </head>
 
-<body>
-   <form method="POST" name="lalavel news" > 
-       <div>
-       <input type="text" name="title" >
+ <body>
+
+
+ <!--確認ダイアログを表示するための関数-->
+ <script>
+  function dialog(){
+    let popup =confirm("入力に間違いはないですか？")
+
+    return popup;
+    }　
+ </script>
+
+  <h1>larabalnews</h1>
+     <!--エラーメッセージの表示-->
+     <ul>
+      <?php foreach($ERROR as $erro_message): ?>
+      <li><?php echo $erro_message  ; ?></li>
+      <?php endforeach;?>  
+      </ul>
+      
+  <!--投稿-->
+   <form id="push"  method="POST" name="lalavel news"  onsubmit="return dialog()"> 
+      <div>
+         <p>タイトル</p>
+          <input type="text" name="title" >
       </div>
       <div>
-       <textarea row="10" cols="60" name="kiji"> </textarea>
+          <p>記事</p>
+          <textarea row="10"cols="60"name="text"></textarea>
       </div>
-       <input type="submit" name="sousin">
+      <div>
+          <input type="submit" name="push" value="投稿"　onclick="">
+      </div>
    </form>
 
-    <h3>
-     <?php echo $title ?>
-    </h3>
-    <p>
-    <?php echo $kiji ?>
-    </p>
-</body>
+  <!--コメント-->
+  <hr>
+  <div>
+     <!--$BOARDから$ARTICLEへ移行？-->
+      <?php foreach ((array)$BOARD as $ARTICLE)  : ?>
+  </div>
+  <p>
+      <?php echo $ARTICLE[1];?>
+  </p>
+  <p>
+      <?php echo $ARTICLE[2];?>
+  </p>
+  <hr>
+  <div>
+    <?php endforeach; ?>
+  </div>
+
+ </body>
 
 </html>

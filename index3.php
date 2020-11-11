@@ -30,7 +30,7 @@ else if(empty($_POST["title"])){
 else if(empty($_POST["text"])){
  $ERROR[]="記事を入力してください";}
 
-
+}
   //リクエストパラメータが空でなければ
 else if(!empty($_POST["text"]) && !empty($_POST["title"])){
 
@@ -45,7 +45,6 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   
   //全体配列をファイルに保存する
   file_put_contents($FILE, json_encode($BOARD)); 
-}
 }
 
 ?>
@@ -106,7 +105,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
       <?php echo $ARTICLE[2];?>
   </p>
   <!--記事全文・コメントへのリンク貼り付け-->
-  <?php echo "<a href=".'"url+$ARTICLE[0]"'.">記事全文・コメント</a>"; ?> 
+  <?php echo "<a href=".'"url"'.">記事全文・コメント</a>"; ?>
   <hr>
   <div>
     <?php endforeach; ?>

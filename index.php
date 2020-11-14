@@ -1,12 +1,14 @@
 <?php
 $title=""; //タイトルの変数
 $text=""; //テキストの変数
-$ERROR=array();//エラーを確認するための変数
+$ERROR=array();//エラーを確認するための配列
 
 $FILE = "article.txt"; //保存ファイル名
 $id = uniqid(); //ユニークなIDを自動生成
 $DATE = []; //一回分の投稿の情報を入れる
 $BOARD = []; //全ての投稿の情報を入れる
+$x=$_GET["$id"]; //$_getでidを獲得
+
 
 
 
@@ -96,7 +98,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   <!--コメント-->
   <hr>
   <div>
-     <!--$BOARDから$ARTICLEへ移行？-->
+     <!--foreachで投稿を繰り返し表示させていく-->
       <?php foreach ((array)$BOARD as $ARTICLE)  : ?>
   </div>
   <p>
@@ -105,8 +107,12 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   <p>
       <?php echo $ARTICLE[2];?>
   </p>
-  <!--記事全文・コメントへのリンク貼り付け-->
-  <?php echo "<a href=".'"url+$ARTICLE[0]"'.">記事全文・コメント</a>"; ?> 
+  <!--記事全文・コメントへのリンク貼り付け--><!-- id=$ARTICLE[0]でurlにidを付随-->
+
+  <p>
+     <a href="http://localhost/meisai.php/?id=<?php echo $ARTICLE[0]?>">記全文・コメント</a>
+      </p>
+  <!--<a href="http://localhost:3306.php/?id=http://localhost/php/meisai.php/?id=<?php echo $ARTICLE[0]?>">記全文・コメント</a> -->
   <hr>
   <div>
     <?php endforeach; ?>

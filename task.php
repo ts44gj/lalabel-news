@@ -10,14 +10,6 @@ $BOARD = []; //全ての投稿の情報を入れる
 $x=$_GET["$id"]; //$_getでidを獲得
 
 
-//mysqlに接続する
-$dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8";
-$user = "ts44gj";
-$pass = "ts44gj";
-
-
-$dbh = new PDO ($dsn,$user,$pass,[
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,]);
 
 
 

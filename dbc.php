@@ -19,7 +19,6 @@ try {
     exit;
 }
 
-$dbh->query("INSERT INTO date_table VALUES (4444, 5555,6666)",);
 
 // SQL文とその中のパラメータを変数にすることもできる
 //$sql = 'SELECT  '商品', '価格' WHERE '商品ID' = $shohin_id';

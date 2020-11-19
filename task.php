@@ -3,7 +3,7 @@ $title=""; //タイトルの変数
 $text=""; //テキストの変数
 $ERROR=array();//エラーを確認するための配列
 
-$FILE = "article.txt"; //保存ファイル名
+$FILE = "article.txt"; //保存ファイル名//DBの時これはいらないはず
 $id = uniqid(); //ユニークなIDを自動生成
 $DATE = []; //一回分の投稿の情報を入れる
 $BOARD = []; //全ての投稿の情報を入れる
@@ -22,12 +22,13 @@ error_reporting(E_ALL &~E_NOTICE);
 
 //DB接続　setAttributeからエラー表示
 try {
-    $dbh = new PDO ($dsn,$user,$pass,$options);
-    $dbh -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbh = new PDO ($dsn,$user,$pass,[
+    PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]);
 } catch (PDOException $e){
     echo $e->getMessage();
     exit;
 }
+
 
 
 // $FILEというファイルが存在する時
@@ -65,8 +66,34 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   
   //全体配列をファイルに保存する
   file_put_contents($FILE, json_encode($BOARD)); 
+
+  //sqlでの出力
+  $sql = "INSERT into data_table VALUES (:id,:title,:article)";
+  try {
+    $stmt=$dbh->prepare($sql);
+    $stmt->bindValue(":id",$id,PDO::PARAM_STR);
+    $stmt->bindValue(":title",$_POST["title"],PDO::PARAM_STR);
+    $stmt->bindValue(":article",$_POST["text"],PDO::PARAM_STR);
+    $check=$stmt->execute();
+  if($check){
+  print "成功！";
+  }else{
+  print "失敗！";
+  };
+  } catch (PDOException $e){
+    echo $e->getMessage();
+    exit;
+  }
+  
 }
 }
+
+
+
+  
+  
+
+
 
 ?>
 <!DOCTYPE html>
@@ -106,7 +133,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
       </div>
       <div>
           <p>記事</p>
-          <textarea row="10"cols="60"name="text"></textarea>
+          <textarea row="10"cols="60"name="text" value="text" ></textarea>
       </div>
       <div>
           <input type="submit" name="push" value="投稿"　onclick="">
@@ -126,11 +153,9 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
       <?php echo $ARTICLE[2];?>
   </p>
   <!--記事全文・コメントへのリンク貼り付け--><!-- id=$ARTICLE[0]でurlにidを付随-->
-
   <p>
      <a href="http://localhost/meisai.php/?id=<?php echo $ARTICLE[0]?>">記全文・コメント</a>
       </p>
-  <!--<a href="http://localhost:3306.php/?id=http://localhost/php/meisai.php/?id=<?php echo $ARTICLE[0]?>">記全文・コメント</a> -->
   <hr>
   <div>
     <?php endforeach; ?>

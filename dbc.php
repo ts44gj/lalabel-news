@@ -19,7 +19,24 @@ try {
     exit;
 }
 
-
+ //sqlでの出力
+ $sql = "INSERT into date_table(id,title,article) VALUES (:id,:title,:article)";
+ try {
+   $stmt=$dbh->prepare($sql);
+   $stmt->bindValue(":id","え",PDO::PARAM_STR);
+   $stmt->bindValue(":title","っあ",PDO::PARAM_STR);
+   $stmt->bindValue(":article","ああ",PDO::PARAM_STR);
+   $check=$stmt->execute();
+ if($check){
+ print "成功！";
+ }else{
+ print "失敗！";
+ };
+ } catch (PDOException $e){
+   echo $e->getMessage();
+   exit;
+ }
+ 
 // SQL文とその中のパラメータを変数にすることもできる
 //$sql = 'SELECT  '商品', '価格' WHERE '商品ID' = $shohin_id';
 //$dbh->query($sql);

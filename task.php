@@ -68,7 +68,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   file_put_contents($FILE, json_encode($BOARD)); 
 
   //sqlでの出力
-  $sql = "INSERT into data_table VALUES (:id,:title,:article)";
+  $sql = "INSERT into date_table(id,title,article) VALUES (:id,:title,:article)";
   try {
     $stmt=$dbh->prepare($sql);
     $stmt->bindValue(":id",$id,PDO::PARAM_STR);

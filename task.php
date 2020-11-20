@@ -1,14 +1,4 @@
 <?php
-$title=""; //タイトルの変数
-$text=""; //テキストの変数
-$ERROR=array();//エラーを確認するための配列
-
-$FILE = "article.txt"; //保存ファイル名//DBの時これはいらないはず
-$id = uniqid(); //ユニークなIDを自動生成
-$DATE = []; //一回分の投稿の情報を入れる
-$BOARD = []; //全ての投稿の情報を入れる
-$x=$_GET["$id"]; //$_getでidを獲得
-
 //変数を用意
 $dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8"; //DBの場所、名前
 $user = "ts44gj"; //DBのユーザ名
@@ -29,6 +19,17 @@ try {
     exit;
 }
 
+
+$title=""; //タイトルの変数
+$text=""; //テキストの変数
+$ERROR=array();//エラーを確認するための配列
+
+//$FILE = "article.txt"; //保存ファイル名//DBの時これはいらないはず
+$FILE =  $sql = "SELECT　* FROM　  date_table"; //date_tableより表示
+$id = uniqid(); //ユニークなIDを自動生成
+$DATE = []; //一回分の投稿の情報を入れる
+$BOARD = []; //全ての投稿の情報を入れる
+$x=$_GET["$id"]; //$_getでidを獲得
 
 
 // $FILEというファイルが存在する時
@@ -87,13 +88,6 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   
 }
 }
-
-
-
-  
-  
-
-
 
 ?>
 <!DOCTYPE html>

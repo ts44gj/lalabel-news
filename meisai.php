@@ -1,8 +1,28 @@
 <?php 
+$dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8"; //DBの場所と名前
+$user = "ts44gj";//ユーザー名
+$pass = "ts44gj";//パスワード
+
+//文字化け防止
+$potion = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");
+
+//PHPのエラーを表示する
+error_reporting(E_ALL &~E_NOTICE);
+
+//DB接続　setAttributeからエラー表示
+try{
+    $dbh = new PDO ($dsn,$yser,$pass,[
+      PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION]);
+}catch(PDOException $e){
+    echo $e->getMessage(); 
+}
+
+
 $uniquedId = uniqid(); //ユニークなIDを作成。
 
 $id = $_GET["id"];
-$FILE = "article.txt";
+//$FILE = "article.txt";
+$FILE =  $sql = "SELECT　* FROM　  date_table";//date_tableより閲覧
 $file = json_decode(file_get_contents($FILE));
 $page_deta= [];
 

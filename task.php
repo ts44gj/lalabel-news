@@ -5,19 +5,14 @@ $ERROR=array();//エラーを確認するための配列
 
 $FILE = "article.txt"; //保存ファイル名
 $id = uniqid(); //ユニークなIDを自動生成
-$DATE = []; //一回分の投稿の情報を入れる
+$DATA = []; //一回分の投稿の情報を入れる
 $BOARD = []; //全ての投稿の情報を入れる
 $x=$_GET["$id"]; //$_getでidを獲得
-
-
-
-
 
 // $FILEというファイルが存在する時
 if (file_exists($FILE)){
   //ファイルを読み込む
 $BOARD = json_decode(file_get_contents($FILE));
-
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
@@ -43,8 +38,8 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
  $text=$_POST["text"];
   //この後に保存の処理をする
   //新規データ
-  $DATE=[$id,$title,$text];
-  $BOARD[] = $DATE;
+  $DATA=[$id,$title,$text];
+  $BOARD[]=$DATE;
   
   //全体配列をファイルに保存する
   file_put_contents($FILE, json_encode($BOARD)); 
@@ -54,16 +49,12 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
 ?>
 <!DOCTYPE html>
  <html>
-
  <head>
   <meta charset='utf-8'>
   <title>larabelnews<</title>
   <!--<link rel="stylesheet" href="stylesheet.css">-->
  </head>
-
  <body>
-
-
  <!--確認ダイアログを表示するための関数-->
  <script>
   function dialog(){
@@ -80,7 +71,6 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
       <li><?php echo $erro_message;?></li>
       <?php endforeach;?>  
       </ul>
-      
   <!--投稿-->
    <form id="push"  method="POST" name="lalavel news"  onsubmit="return dialog()"> 
       <div>
@@ -92,7 +82,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
           <textarea row="10"cols="60"name="text"></textarea>
       </div>
       <div>
-          <input type="submit" name="push" value="投稿"　onclick="">
+          <input type="submit" name="push" value="投稿">
       </div>
    </form>
 

@@ -1,34 +1,14 @@
-<?php 
-//変数を用意
-$dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8"; //DBの場所、名前
-$user = "ts44gj"; //DBのユーザ名
-$pass = "ts44gj"; //DBのパスワード
-
-//文字化け防止
-$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");
-
-//PHPのエラーを表示する
-error_reporting(E_ALL &~E_NOTICE);
-
-//DB接続　setAttributeからエラー表示
-try {
-    $dbh = new PDO ($dsn,$user,$pass,[
-    PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]);
-} catch (PDOException $e){
-    echo $e->getMessage();
-    exit;
-}
+<?php
 
 $uniqueId = uniqid(); //ユニークなIDを自動生成
 
 $id = $_GET['id'];
-//$FILE = './article.txt';
-$FILE =  $sql = "SELECT　* FROM　  data_table";//data_tableより閲覧
+$FILE = './data.txt';
 $file = json_decode(file_get_contents($FILE));
 $page_data = [];
 
-//$COMMENT_DATA = './comment.txt';
-$COMMENT_DATA =$sql = "SELECT　* FROM　  comment_table";//comment_tableより閲覧
+
+$COMMENT_DATA = './comment.txt';
 $comment_data = json_decode(file_get_contents($COMMENT_DATA));
 $comment_board = []; //全体配列
 $text = '';
@@ -44,14 +24,15 @@ foreach ($file as $index => list($ID)) {
   }
 }
 
-//["id","articleId","text"]
-// コメントの情報をここで習得
+// コメントの情報をココで取得
 foreach ($comment_data as $index => list($key, $comment_id)) {
   $comment_board[] = $comment_data[$index];
   if ($comment_id == $id) {
     $COMMENT_BOARD[] = $comment_data[$index];
   }
 }
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   //$_POSTはHTTPリクエストで渡された値を取得する
@@ -62,19 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $error_message[] = "コメント数は50文字以内でお願いします。";
     } else {
 
-      //$textに送信されたテキストを代入
-      $text = $_POST["txt"];
+    //$textに送信されたテキストを代入
+    $text = $_POST['txt'];
 
-      //新規データ
-      $DATA =[$uniquedId, $id , $text];
-      //新規データを全体配列に代入する
-      $comment_board[] = $DATA;
+    //新規データ
+    $DATA = [$uniqueId, $id, $text];
+    //新規データを全体配列に代入する
+    $comment_board[] = $DATA;
 
-      //全体配列をファイルに保存する
-      file_put_contents($COMMENT_DATA,json_encode($comment_board));
+    //全体配列をファイルに保存する
+    file_put_contents($COMMENT_DATA, json_encode($comment_board));
 
-
-  //header()で指定したページにリダイレクト
+    //header()で指定したページにリダイレクト
     //今回は今と同じ場所にリダイレクト（つまりWebページを更新）
     header('Location: ' . $_SERVER['REQUEST_URI']);
     //プログラム終了
@@ -101,26 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //今回は今と同じ場所にリダイレクト（つまりWebページを更新）
     header('Location: ' . $_SERVER['REQUEST_URI']);
     //プログラム終了
-
-     //sqlでの出力
-     $sql = "INSERT into comment_table(uniquedId,id,text1) VALUES (:uniquedId,:id,:text1)";
-     try {
-       $stmt=$dbh->prepare($sql);
-       $stmt->bindValue(":uniquedId",$uniquedId,PDO::PARAM_STR);
-       $stmt->bindValue(":id,",$id,PDO::PARAM_STR);
-       $stmt->bindValue(":text1",$_POST["txt"],PDO::PARAM_STR);
-       $check=$stmt->execute();
-     if($check){
-     print "成功！";
-     }else{
-     print "失敗！";
-     };
-     } catch (PDOException $e){
-       echo $e->getMessage();
-       exit;
-     }
-   
-
     exit;
   } else if (empty($_POST['txt'])) {
     $error_message[] = "コメントは必須です。";
@@ -128,9 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
- 
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 
 <head>

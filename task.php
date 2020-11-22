@@ -25,9 +25,9 @@ $text=""; //テキストの変数
 $ERROR=array();//エラーを確認するための配列
 
 //$FILE = "article.txt"; //保存ファイル名//DBの時これはいらないはず
-$FILE =  $sql = "SELECT　* FROM　  date_table"; //date_tableより表示
+$FILE =  $sql = "SELECT　* FROM　  data_table"; //data_tableより表示
 $id = uniqid(); //ユニークなIDを自動生成
-$DATE = []; //一回分の投稿の情報を入れる
+$DATA = []; //一回分の投稿の情報を入れる
 $BOARD = []; //全ての投稿の情報を入れる
 $x=$_GET["$id"]; //$_getでidを獲得
 
@@ -62,14 +62,14 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
  $text=$_POST["text"];
   //この後に保存の処理をする
   //新規データ
-  $DATE=[$id,$title,$text];
-  $BOARD[] = $DATE;
+  $DATA=[$id,$title,$text];
+  $BOARD[] = $DATA;
   
   //全体配列をファイルに保存する
   file_put_contents($FILE, json_encode($BOARD)); 
 
   //sqlでの出力
-  $sql = "INSERT into date_table(id,title,article) VALUES (:id,:title,:article)";
+  $sql = "INSERT into data_table(id,title,article) VALUES (:id,:title,:article)";
   try {
     $stmt=$dbh->prepare($sql);
     $stmt->bindValue(":id",$id,PDO::PARAM_STR);

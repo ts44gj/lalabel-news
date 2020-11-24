@@ -1,35 +1,43 @@
 <?php
+//変数を用意 PDO
+$dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8"; //DBの場所、名前
+$user = "ts44gj"; //DBのユーザ名
+$pass = "ts44gj"; //DBのパスワード
 
-$user = 'ts44gj';
-$password = 'ts44gj';
-$db = 'lalabel_news'; 
-$host = 'localhost';
-$port = 3306;
-$link = mysqli_init();
-$success = mysqli_real_connect(
-  $link,
-  $host,
-  $user,
-  $password,
-  $db,
-  $port
-);
+//文字化け防止
+$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");
 
-$id = uniqid(); //ユニークなIDを自動生成
+//PHPのエラーを表示する
+error_reporting(E_ALL &~E_NOTICE);
+
+//DB接続　setAttributeからエラー表示
+try {
+    $dbh = new PDO ($dsn,$user,$pass,[
+    PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]);
+} catch (PDOException $e){
+    echo $e->getMessage();
+    exit;
+}
+
 $title=""; //タイトルの変数
 $text=""; //テキストの変数
+$ERROR=array();//エラーを確認するための配列
 
+//$FILE = "article.txt"; //保存ファイル名//DBの時これはいらないはず
+$sql = "SELECT　* FROM　  data_table"; //data_tableより表示
+$sth = $pdo -> query($sql);
+$aryItem = $sth -> fetchAll(PDO::FETCH_ASSOC);
+$FILE = $aryItem;
+
+$id = uniqid(); //ユニークなIDを自動生成
 $DATA = []; //一回分の投稿の情報を入れる
 $BOARD = []; //全ての投稿の情報を入れる
 
-$ERROR=array();//エラーを確認するための配列
 
-$query =  "SELECT * FROM `data_table`";
-if($success){
-    $result =  mysqli_query($link,$query);
-    while($row = mysqli_fetch_array($result)){
-        $BOARD[]= [$row["id"],$row["title"],$row["article"]];
-    }
+// $FILEというファイルが存在する時
+if (file_exists($FILE)){
+  //ファイルを読み込む
+$BOARD = json_decode(file_get_contents($FILE));
 
 }
 
@@ -58,19 +66,29 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   //新規データ
   $DATA=[$id,$title,$text];
   $BOARD[] = $DATA;
-
-  /* INSERT
-  $sql = "INSERT INTO data_table( `id`, `title`,`article`) VALUES ('$id','$title','$text')";
-
-  $res = $mysqli->query($sql);
-
-
-  $mysqli->close();*/
-  $insert_query = "INSERT INTO `data_table`(`id`, `title`,`article`) VALUES ({$id},'{$title}',{$text})";
-  mysqli_query($link,$insert_query);
   
-  header('Location: ' . $_SERVER['SCRIPT_NAME']);
-  exit;
+  //全体配列をファイルに保存する
+  file_put_contents($FILE, json_encode($BOARD)); 
+
+
+  //sqlでの挿入
+  $sql = "INSERT into data_table(id,title,article) VALUES (:id,:title,:article)";
+  try {
+    $stmt=$dbh->prepare($sql);
+    $stmt->bindValue(":id",$id,PDO::PARAM_STR);
+    $stmt->bindValue(":title",$_POST["title"],PDO::PARAM_STR);
+    $stmt->bindValue(":article",$_POST["text"],PDO::PARAM_STR);
+    $check=$stmt->execute();
+  if($check){
+  print "成功！";
+  }else{
+  print "失敗！";
+  };
+  } catch (PDOException $e){
+    echo $e->getMessage();
+    exit;
+  }
+  
 }
 }
 
@@ -123,7 +141,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   <hr>
   <div>
      <!--foreachで投稿を繰り返し表示させていく-->
-      <?php foreach ($BOARD as $ARTICLE)  : ?>
+      <?php foreach ((array)$BOARD as $ARTICLE)  : ?>
   </div>
   <p>
       <?php echo $ARTICLE[1];?>

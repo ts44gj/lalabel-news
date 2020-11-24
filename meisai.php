@@ -1,28 +1,31 @@
 <?php 
-//変数を用意
-$dsn = "mysql:host=localhost;dbname=laravel_news;charset=utf8"; //DBの場所、名前
-$user = "ts44gj"; //DBのユーザ名
-$pass = "ts44gj"; //DBのパスワード
+$user = 'ts44gj';
+$password = 'ts44gj';
+$db = 'laravel_news'; 
+$host = 'localhost';
+$port = 3306;
+$link = mysqli_init();
+$success = mysqli_real_connect(
+  $link,
+  $host,
+  $user,
+  $password,
+  $db,
+  $port
+);
+$query =  "SELECT * FROM `data_table`";
+if($success){
+    $result =  mysqli_query($link,$query);
+    while($row = mysqli_fetch_array($result)){
+        $BOARD[]= [$row["id"],$row["title"],$row["article"]];
+    }
+  }
 
-//文字化け防止
-$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");
-
-//PHPのエラーを表示する
-error_reporting(E_ALL &~E_NOTICE);
-
-//DB接続　setAttributeからエラー表示
-try {
-    $dbh = new PDO ($dsn,$user,$pass,[
-    PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]);
-} catch (PDOException $e){
-    echo $e->getMessage();
-    exit;
-}
 
 $uniqueId = uniqid(); //ユニークなIDを自動生成
 
 $id = $_GET['id'];
-//$FILE = './article.txt';
+$FILE = './article.txt';
 $FILE =  $sql = "SELECT　* FROM　  data_table";//data_tableより閲覧
 $file = json_decode(file_get_contents($FILE));
 $page_data = [];

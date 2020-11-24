@@ -58,11 +58,13 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
   $DATA=[$id,$title,$text];
   $BOARD[] = $DATA;
 
-  $insert_query = "INSERT INTO `data_table`(`id`,`title`,`article`) VALUES ({$id},'{$title}',{$text})";
+  echo "hello";
+
+  $insert_query = "INSERT INTO `data_table`(`id`,`title`,`article)` VALUES ('{$id}','{$title}','{$text}')";
   mysqli_query($link,$insert_query);
 
-  header('Location: ' . $_SERVER['SCRIPT_NAME']);
-  exit;
+  //header('Location: ' . $_SERVER['SCRIPT_NAME']);
+  //exit;
 }
 }
 

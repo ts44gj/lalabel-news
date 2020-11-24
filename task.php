@@ -2,7 +2,7 @@
 
 $user = 'ts44gj';
 $password = 'ts44gj';
-$db = 'lalabel_news'; 
+$db = 'laravel_news'; 
 $host = 'localhost';
 $port = 3306;
 $link = mysqli_init();
@@ -49,26 +49,18 @@ else if(empty($_POST["text"])){
 
   //リクエストパラメータが空でなければ
 else if(!empty($_POST["text"]) && !empty($_POST["title"])){
-
    //投稿ボタンが押された時
    //$title・$textに送信されたテキストを代入
- $title=$_POST["title"];
- $text=$_POST["text"];
+ $title=$_POST['title'];
+ $text=$_POST['text'];
   //この後に保存の処理をする
   //新規データ
   $DATA=[$id,$title,$text];
   $BOARD[] = $DATA;
 
-  /* INSERT
-  $sql = "INSERT INTO data_table( `id`, `title`,`article`) VALUES ('$id','$title','$text')";
-
-  $res = $mysqli->query($sql);
-
-
-  $mysqli->close();*/
-  $insert_query = "INSERT INTO `data_table`(`id`, `title`,`article`) VALUES ({$id},'{$title}',{$text})";
+  $insert_query = "INSERT INTO `data_table`(`id`,`title`,`article`) VALUES ({$id},'{$title}',{$text})";
   mysqli_query($link,$insert_query);
-  
+
   header('Location: ' . $_SERVER['SCRIPT_NAME']);
   exit;
 }
@@ -115,7 +107,7 @@ else if(!empty($_POST["text"]) && !empty($_POST["title"])){
           <textarea row="10"cols="60"name="text" value="text" ></textarea>
       </div>
       <div>
-          <input type="submit" name="push" value="投稿"　onclick="">
+          <input type="submit" name="push" value="投稿"　>
       </div>
    </form>
 
